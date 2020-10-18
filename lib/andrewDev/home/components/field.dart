@@ -1,8 +1,8 @@
-import 'package:elections/constants.dart';
+import 'file:///C:/Users/Other/Desktop/elections/lib/andrewDev/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
-import '../../../screen_size_config.dart';
+import '../../screen_size_config.dart';
 
 class Field extends StatelessWidget {
   final String label;

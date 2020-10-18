@@ -1,9 +1,7 @@
-import 'dart:math';
-
 import 'package:elections/andrewDev/data/Database.dart';
 import 'package:elections/andrewDev/data/PersonModel.dart';
-import 'package:elections/constants.dart';
-import 'package:elections/screen_size_config.dart';
+import 'file:///C:/Users/Other/Desktop/elections/lib/andrewDev/constants.dart';
+import 'file:///C:/Users/Other/Desktop/elections/lib/andrewDev/screen_size_config.dart';
 import 'package:flutter/material.dart';
 
 import 'result_field.dart';
@@ -40,9 +38,7 @@ class _BodyState extends State<Body> {
             children: [
               SearchField(
                 editingController: _editingController,
-                onChange: (query) {
-                  _updateSearchQuery(query);
-                },
+                onChange: (query) => _updateSearchQuery(query),
               ),
               SizedBox(height: getProportionateScreenHeight(kDefaultPadding)),
               ResultFields(

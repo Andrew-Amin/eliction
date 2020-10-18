@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'andrewDev/home/search_elections_place.dart';
+import 'home/search_elections_place.dart';
 
 void main() {
   runApp(MyApp());

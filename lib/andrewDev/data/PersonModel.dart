@@ -12,6 +12,7 @@ class Person {
   String committeeAddress;
   @ColumnInfo(name: 'committee_details', nullable: false)
   String committeeDetail;
+
   Person(this.ssn, this.name, this.committeeNumber, this.committeeAddress,
       this.committeeDetail);
 }

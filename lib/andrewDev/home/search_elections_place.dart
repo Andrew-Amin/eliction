@@ -1,4 +1,4 @@
-import 'package:elections/screen_size_config.dart';
+import 'file:///C:/Users/Other/Desktop/elections/lib/andrewDev/screen_size_config.dart';
 import 'package:flutter/material.dart';
 
 import 'components/body.dart';

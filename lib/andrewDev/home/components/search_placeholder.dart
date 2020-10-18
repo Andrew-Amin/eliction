@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../constants.dart';
-import '../../../screen_size_config.dart';
+import '../../constants.dart';
+import '../../screen_size_config.dart';
 
 class SearchPlaceHolder extends StatelessWidget {
   final String message;
