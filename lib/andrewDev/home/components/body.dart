@@ -1,7 +1,13 @@
+import 'dart:math';
+
+import 'package:elections/andrewDev/data/Database.dart';
+import 'package:elections/andrewDev/data/PersonModel.dart';
+import 'package:elections/constants.dart';
 import 'package:elections/screen_size_config.dart';
 import 'package:flutter/material.dart';
 
-import 'field.dart';
+import 'result_field.dart';
+import 'search_field.dart';
 
 // انتخبو مين الغواص و حببكو
 class Body extends StatefulWidget {
@@ -10,53 +16,39 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  String _SSN = "";
   TextEditingController _editingController = TextEditingController();
+  var _database;
+  var _personDao;
+  Future<Person> _person;
+  bool _clear = false;
+
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(getProportionateScreenWidth(10.0)),
+          padding:
+              EdgeInsets.all(getProportionateScreenWidth(kDefaultPadding / 2)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextField(
-                controller: _editingController,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.search,
-                maxLength: 14,
-                style: TextStyle(fontSize: 22.0),
-                onChanged: (query) => _updateSearchQuery(query),
-                decoration: InputDecoration(
-                  filled: true,
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: Theme.of(context).textTheme.bodyText2.color,
-                  ),
-                  hintText: 'ادخل الرقم القومي',
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide: BorderSide.none),
-                ),
+              SearchField(
+                editingController: _editingController,
+                onChange: (query) {
+                  _updateSearchQuery(query);
+                },
               ),
-              SizedBox(height: getProportionateScreenHeight(25.0)),
-              Field(
-                label: 'الاسم',
-                data: ['محمد محمد الغواص'],
-              ),
-              Field(
-                label: 'رقم اللجنة الفرعية',
-                data: ['515'],
-              ),
-              Field(
-                label: 'مقر اللجنة',
-                data: ['مدرسة الشهيد محمد فهمي الطوخي الابتدائية'],
-              ),
-              Field(
-                label: 'عنوان اللجنة',
-                data: ['مركز طوخ - مدينة طوخ ش الشهيد محمد فهمي الطوخي'],
-              ),
+              SizedBox(height: getProportionateScreenHeight(kDefaultPadding)),
+              ResultFields(
+                person: _person,
+                clear: _clear,
+              )
             ],
           ),
         ),
@@ -64,15 +56,34 @@ class _BodyState extends State<Body> {
     );
   }
 
-  void _updateSearchQuery(String query) {
-    if (query.isNotEmpty && query.length == 14)
-      setState(() {
-        _SSN = query;
-      });
+  void init() async {
+    _database =
+        await $FloorAppDatabase.databaseBuilder('election_database.db').build();
+    _personDao = _database.personDao;
+//    Person temp = Person(
+//        '22223333444455',
+//        'محمد محمد الغواص',
+//        '512',
+//        'مدرسة الشهيد محمد فتحي الابتدائية',
+//        'مركز طوخ - مدينة طوخ ش الشهيد محمد فتحي الطوخي');
+//    _personDao.insertPerson(temp);
+    final result = await _personDao.getAll();
+    print(result.length);
   }
 
-  _performSearch() {
-    //TODO: search in database
-    print("object");
+  void _updateSearchQuery(String query) {
+    if (query.isNotEmpty && query.length == 14) {
+      setState(() {
+        if (_clear) _clear = false;
+      });
+      _person = _personDao.getUserBySsn(query);
+    } else
+      _clearSearchResultsUi();
+  }
+
+  void _clearSearchResultsUi() {
+    setState(() {
+      _clear = true;
+    });
   }
 }
